@@ -65,28 +65,29 @@ Shader "HAM Particles/CRT 2D/Texture Sampling"
 
             float4 frag(crt_v2f i) : SV_Target
             {
-                // x: 0.2958, y: 0.526 (input/output), pixel input zw
+                // Size of texture. x: 0.2958, y: 0.526 (input/output), pixel input zw
                 float4 ham_size = float4(INPUT_W/OUTPUT_W, INPUT_H/OUTPUT_H, INPUT_W, INPUT_H);
-                
-                // THAT IS IF WE GO FROM TOP LEFT CORNER. NO WE DONT.
-                // ITS BOTTOM LEFT CORNER TO TOP RIGHT CORNER.
-                //float height_offset = (208.0+304.0)/OUTPUT_H; // 0.474
-                //float height_offset_with_size = height_offset + ham_size.y;
                 
                 // convert CRT coords to ham-sized coords
                 // ex.: 0.25 / .2958
                 float2 crt_uv = i.crt_uv.xy / ham_size.xy;
                 
+                // single texel
+                float2 texelSize = (float2)1/ham_size.zw;
+                float2 texelOffset = float2(texelSize.x,0);
+                //texelOffset *= 2; // increase offset of each segment by two texels
+                texelOffset *= 0; // clear offset
+                
                 // Color
-                float2 color_uv = float2(0,0) + crt_uv;
+                float2 color_uv = (float2)0 + crt_uv; // no offset, starts right at 0
                 float4 color = tex2D(_ColorTex, color_uv);
                 
                 // Depth
-                float2 depth_uv = float2(-1,.0) + crt_uv;
+                float2 depth_uv = float2(-1,0) + crt_uv - texelOffset; // offset
                 float4 depth = tex2D(_DepthTex, depth_uv);
                 
                 // Bias
-                float2 bias_uv = float2(-2,.0) + crt_uv;
+                float2 bias_uv = float2(-2,0) + crt_uv - texelOffset*2; // double offset
                 float4 bias = tex2D(_XYZBiasTex, bias_uv);
                 
                 float4 preview_uv1 = tex2D(_UV1Tex, i.crt_uv.xy);
