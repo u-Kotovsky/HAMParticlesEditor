@@ -46,20 +46,29 @@ Shader "HAM Particles/CRT 2D/Depth"
             {
                 float depth = _Offset;
                 
-                float3 parameter = float3(i.crt_uv.xy*_Scale //+ float2(_Time.x, -_Time.x)*_Speed
-                    , _Time.x*_Speed);
+                //float3 parameter = float3(i.crt_uv.xy*_Scale //+ float2(_Time.x, -_Time.x)*_Speed
+                //    , _Time.x*_Speed);
                 
-                float noise_simplex = simplex(parameter);
-                float noise_voronoi = voronoi(parameter);
+                //float noise_simplex = simplex(parameter);
+                //float noise_voronoi = voronoi(parameter);
                 //depth += saturate(wave(i.crt_uv.xy, _Frequency, _Amplitude, _Time.x * _Speed*5)*_Power)*10;
                 //depth += noise_voronoi*_Power;//_Time.y;
                 //depth += noise_simplex*_Power;//_Time.y;
+                
+                // how close texel is to the edge?
+                //float edge1 = length(float2(0,0)-i.crt_uv.xy);
+                //float edge2 = length(float2(1,0)-i.crt_uv.xy);
+                //float edge3 = length(float2(0,1)-i.crt_uv.xy);
+                //float edge4 = length(float2(1,1)-i.crt_uv.xy);
+                //depth = 1-max(max(max(edge1, edge2), edge3), edge4);
+                //depth = 1-length((float2).5-i.crt_uv.xy);
+                //depth = 1;
                 
                 //depth = 1.5- length(1.5 - i.crt_uv.y); // angle
                 // the wall
                 //depth = 1- length(.5 - i.crt_uv.y)*2;
                 
-                float4 outColor = float4(depth,depth,depth,1);
+                float4 outColor = float4((float3)depth,1);
                 
                 return saturate(outColor); // alpha is used for HAM color shader to determine, draw color here or not
             }
