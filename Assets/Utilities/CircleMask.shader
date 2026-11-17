@@ -54,7 +54,16 @@ Shader "HAM Particles/CRT 2D/Circle Mask"
                 float4 mainColor = tex2D(_MainTex, i.crt_uv.xy);
                 float4 mask = tex2D(_MaskTex, i.crt_uv.xy); // use alpha for clearing thing out
                 float4 bias = tex2D(_BiasTex, i.crt_uv.xy); // use alpha for clearing thing out
-                return bias*.5;
+                
+                
+                // single texel
+                //float2 texelSize = (float2)1/i.crt_uv.zw;
+                
+                // todo: clean 1 to 2 pixels at the edges so we won't see video compression issues on xyz bias
+                
+                //return bias*.5;
+                return mainColor;
+                //return smoothstep((float4)1*texelSize.x*1,1,mainColor);
                 
                 float mask2 = 
                     //circle(i.crt_uv.xy, _Radius);
@@ -72,7 +81,7 @@ Shader "HAM Particles/CRT 2D/Circle Mask"
                     , _Time.x*1);
                 float noise_simplex = simplex(parameter);
                 float noise_voronoi = voronoi(parameter);
-                //mainColor = float4(rainbow(noise_simplex+_Time.x)*smoothstep(0,1,noise_simplex),1);
+                mainColor = float4(rainbow(noise_simplex+_Time.x)*smoothstep(0,1,noise_simplex),1);
                 //mainColor = float4(smoothstep(0.5,1,noise_simplex)*rainbow(_Time.x),1);
                 //mainColor += noise_simplex*_Power;//_Time.y;
                 
