@@ -1,5 +1,7 @@
 # HAM Particles Editor
-This is a set of tools meant to help make visual effects with HAM particles easier
+This is a set of tools meant to help make visual effects with HAM particles easier.
+
+It would have not existed if not Stage Flight, an amazing project that connect a lot of amazing creatures who make cool stuff!
 
 ## Usage
 Everything works inside Unity Editor. We do not compile this Project into native application as there's no control over that. YET.
