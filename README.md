@@ -13,6 +13,7 @@ This project uses dependencies such as:
 - [VivifyTemplate](https://github.com/Swifter1243/VivifyTemplate) by Swifter1243
 - [CRT2D](https://github.com/OwenTheProgrammer/The-Shader-Grimoire) by OwenTheProgrammer
 - [KlakSpout](https://github.com/keijiro/KlakSpout) by keijiru
+
 You do not need to install them manually. They are located in the source project itself.
 
 ## Installation
