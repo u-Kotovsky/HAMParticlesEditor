@@ -45,7 +45,7 @@ Shader "HAM Particles/CRT 2D/Texture Sampling"
             #define INPUT_W 568.0
             #define INPUT_H 568.0
             
-            bool BoundsValid(float2 target, float2 min, float2 max)
+            bool is_valid_bounds(float2 target, float2 min, float2 max)
             {
                 // upper
                 if (target.x > max.x) return false;
@@ -58,9 +58,9 @@ Shader "HAM Particles/CRT 2D/Texture Sampling"
                 return true;
             }
             
-            bool BoundsValid(float2 target)
+            inline bool is_valid_bounds(float2 target)
             {
-                return BoundsValid(target, (float2)0, (float2)1);
+                return is_valid_bounds(target, 0, 1);
             }
 
             float4 frag(crt_v2f i) : SV_Target
@@ -92,11 +92,11 @@ Shader "HAM Particles/CRT 2D/Texture Sampling"
                 float4 preview_uv1 = tex2D(_UV1Tex, i.crt_uv.xy);
                 
                 // clear color if it's behind the bounds
-                color = BoundsValid(color_uv) ? color : (float4)0;
+                color = is_valid_bounds(color_uv) ? color : (float4)0;
                 //return color;
-                depth = BoundsValid(depth_uv) ? depth : (float4)0;
+                depth = is_valid_bounds(depth_uv) ? depth : (float4)0;
                 //return depth;
-                bias = BoundsValid(bias_uv) ? bias : (float4)0;
+                bias = is_valid_bounds(bias_uv) ? bias : (float4)0;
                 //return bias;
                 
                 float4 outColor = color + depth + bias;
