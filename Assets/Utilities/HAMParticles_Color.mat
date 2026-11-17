@@ -23,6 +23,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BiasTex:
+        m_Texture: {fileID: 8600000, guid: 8684e5c7dd0cf724696cc9eb4831ed8d, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DepthTex:
         m_Texture: {fileID: 8600000, guid: 2b8daa1ed82c19c41a9e5e4091f884aa, type: 2}
         m_Scale: {x: 1, y: 1}

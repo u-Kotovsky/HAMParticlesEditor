@@ -27,7 +27,7 @@ Material:
     m_Floats:
     - _Amplitude: 0.02
     - _Frequency: 10
-    - _Offset: 0.028
+    - _Offset: 1
     - _Power: 0.03
     - _Scale: 15
     - _Speed: 15

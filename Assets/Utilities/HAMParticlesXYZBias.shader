@@ -58,28 +58,35 @@ Shader "HAM Particles/CRT 2D/XYZ Bias Texture Sampling"
             float4 frag(crt_v2f i) : SV_Target
             {
                 // Z is UP
-                //float3 bias = float3(.5,.5,.5) + _Offset.xzy; // middle (color)
-                float3 bias = float3(0,0,0); // middle (color)
+                //float3 bias = (float3).5 + _Offset.xzy; // middle (color)
+                float3 bias = (float3)0 + _Offset.xzy; // middle (color)
                 
                 // todo: pulse particles from center to edges
                 
-                float2 diff = float2(0.5,0.5) - i.crt_uv.xy;
+                float2 diff = (float2).5 - i.crt_uv.xy;
                 float dist = length(diff);
-                //float2 dir = dot(i.crt_uv.xy, float2(0.5,0.5));
+                //float2 dir = dot(i.crt_uv.xy, (float2).5);
                 
                 // Trochoidal wave / Gerstner wave
                 
                 // -1,1
-                float mult = 4;
+                float mult = 8;
                 float pixelId = i.crt_uv.x + i.crt_uv.y;
+                float t = _Time.x;
+                // this is not trochoidal wave technically, I just make circles here
                 float3 trochoidal_wave = float3(
-                    sin(_Time.y+i.crt_uv.x*mult),
-                    cos(_Time.y+pixelId*mult),
-                    sin(_Time.y+i.crt_uv.y*mult)
+                    sin((t+i.crt_uv.x)*mult),
+                    cos((t+pixelId)*mult),
+                    sin((t+i.crt_uv.y)*mult)
                     );
+                /*float3 trochoidal_wave = float3(
+                    cos(_Time.y+pixelId*i.crt_uv.x*mult),
+                    sin(_Time.y+pixelId*mult),
+                    sin(_Time.y+pixelId*i.crt_uv.y*mult)
+                    );*/
                 
-                //trochoidal_wave += float3(1,1,1);
-                //trochoidal_wave /= float3(2,2,2);
+                //trochoidal_wave += (float3)1;
+                //trochoidal_wave /= (float3)2;
                 
                 //trochoidal_wave = normalize(trochoidal_wave); // it looks cool combined w/ below
                 //trochoidal_wave = normalize(trochoidal_wave);
@@ -94,6 +101,20 @@ Shader "HAM Particles/CRT 2D/XYZ Bias Texture Sampling"
                     (trochoidal_wave.z+1)/2);
                 
                 bias += normalized_wave;
+                
+                // calculate distance of current texel to the center and put difference in bias
+                //float2 diff1 = (float2)1 - i.crt_uv.xy;
+                //float len1 = length(diff1);
+                //float t1 = .2;//(sin(_Time.y)+1)/2;
+                //bias.xy = lerp((float2).5, diff1, _Slider1);
+                //bias.z = .5;
+                
+                //bias.xy += sin(_Time.x+pixelId)*.1;
+                //bias = 0;
+                
+                // reset to default
+                //bias.xyz = (float3).5+_Offset;
+                
                 
                 //bias.x += (trochoidal_wave.x+1)*8/2;
                 //bias.y += (trochoidal_wave.y+1)*8/2;
