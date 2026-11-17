@@ -42,17 +42,62 @@ Shader "HAM Particles/CRT 2D/XYZ Bias Texture Sampling"
             float _Power;
             float _Slider1;
             
+            float2 TrochoidalWave(float a, float b, float t)
+            {
+                // x and y are positions
+                // (x,y) = (a,b)
+                
+                // constant speed c exp(kb)
+                // k=2PI/Lambda - wavenumber
+                // Lambda - wavelength
+                // c - phase speed
+                
+                return (float2)0;
+            }
+            
             float4 frag(crt_v2f i) : SV_Target
             {
                 // Z is UP
-                float3 bias = float3(.5,.5,.5) + _Offset.xzy; // middle (color)
-                //float3 bias = float3(0,0,0); // middle (color)
+                //float3 bias = float3(.5,.5,.5) + _Offset.xzy; // middle (color)
+                float3 bias = float3(0,0,0); // middle (color)
                 
                 // todo: pulse particles from center to edges
                 
                 float2 diff = float2(0.5,0.5) - i.crt_uv.xy;
                 float dist = length(diff);
                 //float2 dir = dot(i.crt_uv.xy, float2(0.5,0.5));
+                
+                // Trochoidal wave / Gerstner wave
+                
+                // -1,1
+                float mult = 4;
+                float pixelId = i.crt_uv.x + i.crt_uv.y;
+                float3 trochoidal_wave = float3(
+                    sin(_Time.y+i.crt_uv.x*mult),
+                    cos(_Time.y+pixelId*mult),
+                    sin(_Time.y+i.crt_uv.y*mult)
+                    );
+                
+                //trochoidal_wave += float3(1,1,1);
+                //trochoidal_wave /= float3(2,2,2);
+                
+                //trochoidal_wave = normalize(trochoidal_wave); // it looks cool combined w/ below
+                //trochoidal_wave = normalize(trochoidal_wave);
+                
+                //trochoidal_wave*=.1;
+                
+                //bias.xyz +=  trochoidal_wave.xyz;//(trochoidal_wave.xyz+1.)/2.;
+                
+                float3 normalized_wave = float3(
+                    (trochoidal_wave.x+1)/2,
+                    (trochoidal_wave.y+1)/2,
+                    (trochoidal_wave.z+1)/2);
+                
+                bias += normalized_wave;
+                
+                //bias.x += (trochoidal_wave.x+1)*8/2;
+                //bias.y += (trochoidal_wave.y+1)*8/2;
+                //bias.z += (trochoidal_wave.z+1)*8/2;
                 
                 // the wall
                 // move points near each other to form a thick line

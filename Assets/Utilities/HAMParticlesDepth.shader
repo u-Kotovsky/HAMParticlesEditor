@@ -52,8 +52,8 @@ Shader "HAM Particles/CRT 2D/Depth"
                 float noise_simplex = simplex(parameter);
                 float noise_voronoi = voronoi(parameter);
                 //depth += saturate(wave(i.crt_uv.xy, _Frequency, _Amplitude, _Time.x * _Speed*5)*_Power)*10;
-                depth += noise_voronoi*_Power;//_Time.y;
-                depth += noise_simplex*_Power;//_Time.y;
+                //depth += noise_voronoi*_Power;//_Time.y;
+                //depth += noise_simplex*_Power;//_Time.y;
                 
                 //depth = 1.5- length(1.5 - i.crt_uv.y); // angle
                 // the wall
