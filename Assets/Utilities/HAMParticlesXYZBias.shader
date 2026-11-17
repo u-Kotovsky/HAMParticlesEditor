@@ -1,0 +1,102 @@
+Shader "HAM Particles/CRT 2D/XYZ Bias Texture Sampling"
+{
+    Properties
+    {
+        _Offset("Offset", Vector) = (0,0,0,0)
+        _Amplitude ("Amplitude", Float) = 1
+        _Frequency ("Frequency", Float) = 1
+        _Speed ("Speed", Float) = 1
+        _Power ("Power", Range(-1,1)) = 1
+        
+        _Slider1 ("Slider 1", Range(-1,1)) = 1
+    }
+    SubShader
+    {
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "PreviewType" = "Skybox"
+        }
+
+        Blend One Zero
+        Lighting Off
+        ZTest Always
+        ZWrite Off
+
+        Pass
+        {
+            Name "CRT Texture Sampler"
+            CGPROGRAM
+            #pragma vertex crt_vert
+            #pragma fragment frag
+            
+            #include "UnityCG.cginc"
+            #include "Assets/_OwenTheProgrammer/ShaderGrimoire/CRT2D/Shaders/CRTStandard2D.cginc"
+            #include "Util.cginc"
+            #include "Assets/VivifyTemplate/Utilities/Shader Functions/Colors.cginc"
+
+            float3 _Offset;
+            float _Amplitude;
+            float _Frequency;
+            float _Speed;
+            float _Power;
+            float _Slider1;
+            
+            float4 frag(crt_v2f i) : SV_Target
+            {
+                // Z is UP
+                float3 bias = float3(.5,.5,.5) + _Offset.xzy; // middle (color)
+                //float3 bias = float3(0,0,0); // middle (color)
+                
+                // todo: pulse particles from center to edges
+                
+                float2 diff = float2(0.5,0.5) - i.crt_uv.xy;
+                float dist = length(diff);
+                //float2 dir = dot(i.crt_uv.xy, float2(0.5,0.5));
+                
+                // the wall
+                // move points near each other to form a thick line
+                //bias.y = length(1 - i.crt_uv.y)*.9; // *.9 is to reduce color loss
+                // adjust height 
+                //bias.z = 1 - length(.5 - i.crt_uv.y); // height
+                
+                //bias.z -= length(1.5 - i.crt_uv.y);
+                
+                // todo: spin around
+                // weird
+                //bias.x = lerp(bias.x,(sin(_Time.y)+1)/2,dist); // -1,1
+                //bias.y = lerp(bias.y,(cos(_Time.y)+1)/2,dist); // -1,1
+                
+                //bias.z = 1;
+                // cone
+                //bias.z -= (sin(dist*5)+1/2)*.35;
+                //bias.z += sin(_Time.y+dist*128)*.015;
+                
+                // in and out deformation
+                //bias.xy += diff * lerp(0,dist,sin(_Time.y)+1/2)*10;
+                //bias.xy += diff * lerp(0,dist,_Slider1)*10;
+                
+                //bias.xy += diff * dist*5;
+                
+                //float2 circle = float2(sin(_Time.x), cos(_Time.x))*.5;
+                
+                //bias.x += circle.x;
+                //bias.z += circle.x;
+                //bias.y += circle.y;
+                
+                //bias.z += wave(i.crt_uv.xy, _Frequency, _Amplitude, _Time.x * _Speed);
+                
+                float4 outColor = float4(saturate(bias),1);
+                
+                //outColor.xyz = LinearToGammaSpace(outColor);
+                //outColor.xyz = GammaToLinearSpace(outColor);
+                //outColor.xyz = LinearToGammaSpaceExact(outColor);
+                //outColor.xyz = gammaCorrect(outColor.xyz);
+                
+                return saturate(outColor);
+            }
+
+            ENDCG
+        }
+    }
+}
