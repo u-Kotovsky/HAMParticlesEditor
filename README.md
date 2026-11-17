@@ -36,3 +36,5 @@ This project is being licensed under MIT License at the time of writing, as well
 [CRT2D](https://github.com/OwenTheProgrammer/The-Shader-Grimoire) by OwenTheProgrammer, MIT license
 
 [KlakSpout](https://github.com/keijiro/KlakSpout) by keijiru, Unlicense license
+
+Code for HAM Particles visualizer and mesh generator is based on [GPUParticleVolumes](https://github.com/REDSIM/GPUParticleVolumes) by RED_SIM
