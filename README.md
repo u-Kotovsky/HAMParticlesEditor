@@ -3,6 +3,12 @@ This is a set of tools meant to help make visual effects with HAM particles easi
 
 It would have not existed if not Stage Flight, an amazing project that connect a lot of amazing creatures who make cool stuff!
 
+## What is HAM Particles?
+It's a grid of particles, that read color from three (or two) textures as (Color, Depth/Height, (Optional) XYZ Bias) that lets you do quite interesting effects!
+
+## Why?
+I didn't have money to actually get TouchDesigner (free plan is not quite enough for what I want to do. limited resolution 1280x1280 stops me from using three texture mode for HAM particles) or other software that lets you do mostly the same thing (custom shaders output) and I just personally liked the idea of generating stuff with shaders in Unity.
+
 ## Usage
 Everything works inside Unity Editor. We do not compile this Project into native application as there's no control over that. YET.
 To adjust stuff you can play around with sliders in shaders for Color,Depth,XYZBias or edit them directly.
