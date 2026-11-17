@@ -5,6 +5,7 @@ Shader "HAM Particles/CRT 2D/Circle Mask"
         _MainTex("Main Texture", 2D) = "white" {}
         _Color("Color", Color) = (1,1,1,1)
         _MaskTex("Mask Texture", 2D) = "red" {}
+        _BiasTex("Bias Texture", 2D) = "red" {}
         _Radius("Radius", Range(-1,2)) = 0.5
         _Radius2("Smooth", Range(-1,2)) = 0.5
     }
@@ -36,9 +37,14 @@ Shader "HAM Particles/CRT 2D/Circle Mask"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            
             float4 _Color;
+            
             sampler2D _MaskTex;
             float4 _MaskTex_ST;
+            
+            sampler2D _BiasTex;
+            float4 _BiasTex_ST;
             
             float _Radius;
             float _Smooth;
@@ -47,6 +53,8 @@ Shader "HAM Particles/CRT 2D/Circle Mask"
             {
                 float4 mainColor = tex2D(_MainTex, i.crt_uv.xy);
                 float4 mask = tex2D(_MaskTex, i.crt_uv.xy); // use alpha for clearing thing out
+                float4 bias = tex2D(_BiasTex, i.crt_uv.xy); // use alpha for clearing thing out
+                return bias*.5;
                 
                 float mask2 = 
                     //circle(i.crt_uv.xy, _Radius);
